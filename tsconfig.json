@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // ou ES2015, dependendo da sua necessidade
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": [
+    "services/apiService.ts",
+    "index.ts",
+    "services/apiService.js",
+    "index.js"
+  ]
+}
