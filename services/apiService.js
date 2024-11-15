@@ -11,20 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscarMarcas = buscarMarcas;
 const fetch = require('node-fetch');
-const url = 'https://parallelum.com.br/fipe/api/v1/carros/marcas';
-function buscarMarcas() {
+const url = 'https://parallelum.com.br/fipe/api/v1';
+function buscarMarcas(marca) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch(url);
-            if (!response.ok) {
-                throw new Error(`Erro ao buscar as marcas: ${response.statusText}`);
-            }
-            const data = yield response.json();
-            return data;
+        const response = yield fetch(`${url}/carros/marcas/${marca}/modelos`);
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar as marcas: ${response.statusText}`);
         }
-        catch (error) {
-            console.error('Erro: ', error);
-        }
+        const data = yield response.json();
+        return data.modelos.map((car) => ({
+            nome: car.nome,
+            marca: marca,
+        }));
     });
 }
 // buscarMarcas().then(marcas => console.log('Marcas encontradas:', marcas[0]));

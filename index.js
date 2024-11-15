@@ -10,12 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const apiService_1 = require("./services/apiService");
-;
 function exibirMarcas() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const marcas = yield (0, apiService_1.buscarMarcas)();
-            console.log('Marcas encontradas: ', marcas);
+            const brand = '59';
+            const cars = yield (0, apiService_1.buscarMarcas)(brand);
+            cars.forEach((car) => {
+                console.log(`Marca: ${car.marca}, Nome: ${car.nome}`);
+            });
         }
         catch (error) {
             console.error('Erro ao encontrar as marcas: ', error);

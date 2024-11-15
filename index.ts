@@ -1,9 +1,12 @@
-import { buscarMarcas } from './services/apiService'; ;
+import { buscarMarcas } from './services/apiService'; 
 
 async function exibirMarcas() {
     try {
-        const marcas = await buscarMarcas();
-        console.log('Marcas encontradas: ', marcas);
+       const brand = '59'
+       const cars = await buscarMarcas(brand);
+       cars.forEach((car) => {
+        console.log(`Marca: ${car.marca}, Nome: ${car.nome}`)
+       })
 
     }
     catch(error) {
