@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,15 +7,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const apiService_1 = require("./services/apiService");
-function exibirMarcas() {
+import { buscarMarcas } from './apiService'; // Ajuste o caminho se necessário
+function exibirMarcas(marcaInput) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const brand = '59';
-            const cars = yield (0, apiService_1.buscarMarcas)(brand);
-            cars.forEach((car) => {
-                console.log(`Marca: ${car.marca}, Nome: ${car.nome}`);
+            const minMarcaId = 1;
+            const maxMarcaId = 40;
+            const marca = (Math.floor(Math.random() * (maxMarcaId - minMarcaId + 1)) + minMarcaId).toString();
+            const cars = yield buscarMarcas();
+            const resultadoLista = document.getElementById('results');
+            resultadoLista.innerHTML = '';
+            cars.map((car) => {
+                const li = document.createElement('li');
+                li.textContent = `Marca: ${car.marca}, Nome: ${car.nome}`;
+                resultadoLista.appendChild(li);
             });
         }
         catch (error) {
@@ -24,4 +28,7 @@ function exibirMarcas() {
         }
     });
 }
-exibirMarcas();
+document.getElementById('buscarBtn').addEventListener('click', () => {
+    const marcaInput = document.getElementById('marcaInput').value;
+    exibirMarcas(marcaInput || undefined);
+});
