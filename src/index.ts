@@ -17,7 +17,7 @@ async function exibirMarcas() {
     } catch (error) {
         console.error('Erro ao encontrar as marcas: ', error);
         const resultsList = document.getElementById('results') as HTMLUListElement;
-        resultsList.innerHTML = '<li>Erro ao carregar as marcas. Tente novamente.</li>';
+        resultsList.innerHTML = '<li class="error">Erro ao carregar as marcas. Tente novamente.</li>';
     }
 }
 
