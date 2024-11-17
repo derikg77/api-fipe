@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var _a;
-import { buscarMarcas } from './apiService';
+import { buscarMarcas } from './apiService.js';
 function exibirMarcas() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

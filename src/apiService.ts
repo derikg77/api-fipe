@@ -1,9 +1,7 @@
-
-import { Car} from "./fibeTypes"
-
-const fetch = require('node-fetch');
-
-
+interface Car {
+    nome: string,
+    marca: string,
+}
 
 export async function buscarMarcas(marca: string): Promise<Car[]> {
     const baseUrl = 'https://parallelum.com.br/fipe/api/v1/carros/marcas';

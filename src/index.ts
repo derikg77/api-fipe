@@ -1,4 +1,5 @@
-import { buscarMarcas } from './apiService';
+import { buscarMarcas } from './apiService.js';  
+
 
 async function exibirMarcas() {
     try {

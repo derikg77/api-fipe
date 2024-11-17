@@ -9,7 +9,6 @@
   },
   "include": [
     "src/apiService.ts",
-    "src/fibeTypes.ts",
     "src/index.ts"
   ]
 }

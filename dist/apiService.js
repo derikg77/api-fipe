@@ -7,7 +7,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const fetch = require('node-fetch');
 export function buscarMarcas(marca) {
     return __awaiter(this, void 0, void 0, function* () {
         const baseUrl = 'https://parallelum.com.br/fipe/api/v1/carros/marcas';
