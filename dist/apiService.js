@@ -7,18 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-export function buscarMarcas(marca) {
+export function buscarMarcas(marca, modelo) {
     return __awaiter(this, void 0, void 0, function* () {
-        const baseUrl = 'https://parallelum.com.br/fipe/api/v1/carros/marcas';
-        const url = `${baseUrl}/${marca}/modelos`;
-        const response = yield fetch(url);
+        const baseUrl = 'https://parallelum.com.br/fipe/api/v1/carros/marcas'; // estou armanzenando o url da API em uma variavel
+        const url = `${baseUrl}/${marca}/modelos/${modelo}`; // defini outra variavel para poder setar o que eu quero com template literal
+        const response = yield fetch(url); // esperando a resposta da API via fetch
         if (!response.ok) {
-            throw new Error(`Erro ao buscar as marcas: ${response.statusText}`);
+            throw new Error(`Erro ao buscar as marcas: ${response.statusText}`); // verificando se a resposta retornar ok
         }
-        const data = yield response.json();
+        const data = yield response.json(); // convertendo os dados da api em arquivo json
         return data.modelos.map((car) => ({
             nome: car.nome,
-            marca: marca,
+            marca: car.marca,
+            modelo: car.modelo
         }));
     });
 }

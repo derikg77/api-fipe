@@ -7,27 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
 import { buscarMarcas } from './apiService.js';
 function exibirMarcas() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const marcaInput = document.getElementById('marcaInput');
-            const marcaId = marcaInput.value || '59';
-            const cars = yield buscarMarcas(marcaId);
-            const resultsList = document.getElementById('results');
-            resultsList.innerHTML = '';
-            cars.forEach((car) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Marca: ${car.marca}, Nome: ${car.nome}`;
-                resultsList.appendChild(listItem);
-            });
+            const input = document.getElementById('marcaInput'); // selecionando o input e convertendo para html elemnet para que p typescript o interprete
+            const marcaId = input.value.trim(); // selecionando a marca do modelo
+            const cars = yield buscarMarcas(marcaId); // esperando a promisse retornar o modelo e a marca 
+            const resultList = document.getElementById('results'); // selecionando o resultado que vai retonar da listagem do input
         }
         catch (error) {
-            console.error('Erro ao encontrar as marcas: ', error);
-            const resultsList = document.getElementById('results');
-            resultsList.innerHTML = '<li class="error">Erro ao carregar as marcas. Tente novamente.</li>';
+            console.error('Erro ao encontrar as marcas: ', error); // definindo uma mensagem de erro primeiramente no console
         }
     });
 }
-(_a = document.getElementById('buscarBtn')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', exibirMarcas);
+const buscarBtn = document.getElementById('buscarBtn');
+console.log(buscarBtn.addEventListener('click', exibirMarcas));
