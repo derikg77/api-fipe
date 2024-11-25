@@ -12,9 +12,25 @@ function exibirMarcas() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const input = document.getElementById('marcaInput'); // selecionando o input e convertendo para html elemnet para que p typescript o interprete
-            const marcaId = input.value.trim(); // selecionando a marca do modelo
-            const cars = yield buscarMarcas(marcaId); // esperando a promisse retornar o modelo e a marca 
-            const resultList = document.getElementById('results'); // selecionando o resultado que vai retonar da listagem do input
+            const itemSearch = input.value.toLowerCase();
+            const marcas = yield buscarMarcas(); // buscando o valor pelo input
+            console.log('Marcas disponíveis:', marcas); // Verifica o retorno da API
+            console.log('Valor pesquisado:', itemSearch); // Verifica o valor digitado
+            const marcasFiltradas = marcas.filter((marca) => // Filtrar o nome da marca com o filter
+             marca.nome.toLowerCase().includes(itemSearch));
+            console.log('Marcas filtradas:', marcasFiltradas);
+            const resulList = document.getElementById('results');
+            resulList.innerHTML = '';
+            if (marcasFiltradas.length > 0) { // condição para exibir as marcas encontradas
+                marcasFiltradas.forEach((marca) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = ` Nome: ${marca.nome}`;
+                    resulList.appendChild(listItem);
+                });
+            }
+            else {
+                resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>';
+            }
         }
         catch (error) {
             console.error('Erro ao encontrar as marcas: ', error); // definindo uma mensagem de erro primeiramente no console
@@ -22,4 +38,4 @@ function exibirMarcas() {
     });
 }
 const buscarBtn = document.getElementById('buscarBtn');
-console.log(buscarBtn.addEventListener('click', exibirMarcas));
+buscarBtn.addEventListener('click', exibirMarcas); // chamando o evento de clik para exibir as marcas
