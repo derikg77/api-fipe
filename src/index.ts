@@ -1,67 +1,98 @@
-import { buscarMarcas, buscarModelos } from './apiService.js';  
+import { buscarMarcas, buscarModelos } from './apiService.js';
 
+// const modelosFixos = [
+//     { marca: 'Toyota', modelos: ['Corolla', 'Hilux', 'Yaris'] },
+//     { marca: 'Ford', modelos: ['Focus', 'Ranger', 'Mustang'] },
+//     { marca: 'Volkswagen', modelos: ['Golf', 'Polo', 'Tiguan'] },
+//     { marca: 'Chevrolet', modelos: ['Onix', 'Tracker', 'Cruze'] },
+// ];
 
-
+// Função para exibir marcas
 async function exibirMarcas() {
-   
     try {
-        const input = document.getElementById('marcaInput') as HTMLInputElement // selecionando o input e convertendo para html elemnet para que p typescript o interprete
+        const input = document.getElementById('marcaInput') as HTMLInputElement;
         const itemSearch = input.value.toLowerCase();
-        const marcas =  await buscarMarcas(); // buscando o valor pelo input
-    
-      
-        // console.log('Marcas disponíveis:', marcas); // Verifica o retorno da API
-        // console.log('Valor pesquisado:', itemSearch); // Verifica o valor digitado
-      
-        const marcasFiltradas = marcas.filter((marca) => // Filtrar o nome da marca com o filter com o valor digitado do input
+
+        // Simulando marcas disponíveis (como retorno de API)
+        const marcas = await buscarMarcas(); // Simula busca de marcas a partir da API
+        console.log('Marcas disponíveis:', marcas);
+
+        const marcasFiltradas = marcas.filter((marca: any) =>
             marca.nome.toLowerCase().includes(itemSearch)
         );
         console.log('Marcas filtradas:', marcasFiltradas);
-        
-       const resulList = document.getElementById('results') as HTMLUListElement;
-       resulList.innerHTML = '';
-       if(!itemSearch) {
-        resulList.innerHTML = '<li class="error">Por favor, digite o nome de uma marca.</li>';
-        return; // Interrompe a execução da função
-    }
-           if(marcasFiltradas.length > 0) { // condição para exibir as marcas encontradas
-            marcasFiltradas.forEach((marca) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = ` Nome: ${marca.nome}`;
-                listItem.addEventListener('click', async () => {
-                    await exibirModelos(marca.nome)
-                })
-                resulList.appendChild(listItem)
-            })
-           } else {
-            resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>'
+
+        const resulList = document.getElementById('results') as HTMLUListElement;
+        resulList.innerHTML = '';
+
+        if (!itemSearch) {
+            resulList.innerHTML = '<li class="error">Por favor, digite o nome de uma marca.</li>';
             return;
-           }
-    
- } catch (error) {
-     console.error('Erro ao encontrar as marcas: ', error); // definindo uma mensagem de erro primeiramente no console
- }
-}
+        }
 
-async function exibirModelos(marcaNome: string) {
-    try {
-        console.log('Marca selecionada: ', marcaNome)
-        const modelosSelect = document.getElementById('modelosSelect') as HTMLSelectElement;
-        const modelos = await buscarModelos();
-
-        console.log('Modelos disponiveis: ', modelos);
-
-        const modelosFiltrados = modelos.filter((modelo) => {
-            modelo.nome.toLowerCase().includes(marcaNome.toLowerCase())
-        })
-
-        console.log('Modelos filtrados: ', modelosFiltrados)
-
-    } catch(error) {
-        console.error('erro ao buscar as marcas')
+        if (marcasFiltradas.length > 0) {
+            marcasFiltradas.forEach((marca: any) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Nome: ${marca.nome}`;
+                listItem.addEventListener('mousemove', async () => {
+                    console.log(`Marca clicada: ${marca}`);
+                    if (marcasFiltradas.length === 1) {
+                        await exibirModelos(marcasFiltradas[0].nome);
+                    }
+                });
+                resulList.appendChild(listItem);
+            });
+        } else {
+            resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>';
+        }
+    } catch (error) {
+        console.error('Erro ao buscar marcas:', error);
     }
 }
 
+// Função para exibir modelos com base na marca selecionada
+async function exibirModelos(marcaNome: string) {
+    console.log('Marca selecionada:', marcaNome);
 
-const buscarBtn = document.getElementById('buscarBtn') as HTMLButtonElement
-buscarBtn.addEventListener('click', exibirMarcas) // chamando o evento de clik para exibir as marcas
+    const modelosSelect = document.getElementById('modelosSelect') as HTMLSelectElement;
+
+    try {
+        // Limpando as opções anteriores
+        modelosSelect.innerHTML = '<option value="">Selecione um modelo</option>';
+        // Buscando os modelos da marca via API
+        const modelos = await buscarModelos(); // Passa a marca selecionada para buscar modelos
+        console.log('Modelos encontrados:', modelos);
+        
+
+        if (modelos.length > 0) {
+            modelos.forEach((modelo: any) => {
+                const option = document.createElement('option');
+                option.value = modelo.nome;
+                option.textContent = modelo.nome;
+                modelosSelect.appendChild(option);
+            });
+
+            modelosSelect.classList.remove('hidden'); // Exibe o select com os modelos
+        } else {
+            modelosSelect.innerHTML = '<option>Nenhum modelo encontrado</option>';
+            
+        }
+    } catch (error) {
+        console.error('Erro ao buscar modelos:', error);
+        modelosSelect.innerHTML = '<option>Erro ao carregar modelos</option>';
+        modelosSelect.classList.remove('hidden');
+    }
+}
+
+const buscarBtn = document.getElementById('buscarBtn') as HTMLButtonElement;
+buscarBtn.addEventListener('click', () => {
+    console.log('Botão de busca clicado');
+    exibirMarcas(); // Exibe as marcas ao clicar no botão
+});
+
+window.onload = () => {
+    const modelosSelect = document.getElementById('modelosSelect') as HTMLSelectElement;
+    modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
+};
+const marcaInput = document.getElementById('marcaInput') as HTMLInputElement;
+marcaInput.addEventListener('input', exibirMarcas);

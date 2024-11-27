@@ -10,13 +10,15 @@ export async function buscarMarcas(nome?: string): Promise<Marca[]> { // estou e
     }
     const data = await response.json(); // convertendo os dados da api em arquivo json
     const marcas: Marca[] = data.map((car: any) => ({ // fazendo um map para percorrer e me retornar uma array nova com os dados que quero da API 
-        nome: car.nome       
+        nome: car.nome 
+          
     }))
     if(nome) { // verificando para filtrar o nome da marca
         return marcas.filter((marca) => {
             marca.nome.toLowerCase().includes(nome.toLowerCase())
         })
     }
+
     return marcas;
 }
 interface Modelo {
@@ -30,13 +32,13 @@ export async function buscarModelos(nome?: string): Promise<Modelo[]> {
         throw new Error(`Erro ao buscar os modelos: ${response.statusText}`)
     }
     const data = await response.json(); // convertendo a resposta em json e armazenando na variavel data
-    console.log(data);
-    const modelos: Modelo[] = data.modelos.map((modelo: any) =>({ // dando uma iteração para buscar o nome dos modelos com o map
+    console.log('Resposta da API de modelos:', data); // Verifica os dados recebidos
+    const modelos = data.modelos.map((modelo: any) =>({ // dando uma iteração para buscar o nome dos modelos com o map
         nome: modelo.nome
     }))
     if(nome) { // verificar para filtrar somente o nome do modelo
-        return modelos.filter((modelo) =>   {
-            modelo.nome.toLowerCase().includes(nome.toLocaleLowerCase())
+        return modelos.filter((modelo: any) =>   {
+            modelo.nome.toLowerCase().includes(nome.toLowerCase())
         })
     }
     return modelos; // retornando os modelos no final da condição

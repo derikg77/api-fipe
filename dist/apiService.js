@@ -34,13 +34,13 @@ export function buscarModelos(nome) {
             throw new Error(`Erro ao buscar os modelos: ${response.statusText}`);
         }
         const data = yield response.json(); // convertendo a resposta em json e armazenando na variavel data
-        console.log(data);
+        console.log('Resposta da API de modelos:', data); // Verifica os dados recebidos
         const modelos = data.modelos.map((modelo) => ({
             nome: modelo.nome
         }));
         if (nome) { // verificar para filtrar somente o nome do modelo
             return modelos.filter((modelo) => {
-                modelo.nome.toLowerCase().includes(nome.toLocaleLowerCase());
+                modelo.nome.toLowerCase().includes(nome.toLowerCase());
             });
         }
         return modelos; // retornando os modelos no final da condição

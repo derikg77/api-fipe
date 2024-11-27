@@ -8,59 +8,90 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { buscarMarcas, buscarModelos } from './apiService.js';
+// const modelosFixos = [
+//     { marca: 'Toyota', modelos: ['Corolla', 'Hilux', 'Yaris'] },
+//     { marca: 'Ford', modelos: ['Focus', 'Ranger', 'Mustang'] },
+//     { marca: 'Volkswagen', modelos: ['Golf', 'Polo', 'Tiguan'] },
+//     { marca: 'Chevrolet', modelos: ['Onix', 'Tracker', 'Cruze'] },
+// ];
+// Função para exibir marcas
 function exibirMarcas() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const input = document.getElementById('marcaInput'); // selecionando o input e convertendo para html elemnet para que p typescript o interprete
+            const input = document.getElementById('marcaInput');
             const itemSearch = input.value.toLowerCase();
-            const marcas = yield buscarMarcas(); // buscando o valor pelo input
-            // console.log('Marcas disponíveis:', marcas); // Verifica o retorno da API
-            // console.log('Valor pesquisado:', itemSearch); // Verifica o valor digitado
-            const marcasFiltradas = marcas.filter((marca) => // Filtrar o nome da marca com o filter com o valor digitado do input
-             marca.nome.toLowerCase().includes(itemSearch));
+            // Simulando marcas disponíveis (como retorno de API)
+            const marcas = yield buscarMarcas(); // Simula busca de marcas a partir da API
+            console.log('Marcas disponíveis:', marcas);
+            const marcasFiltradas = marcas.filter((marca) => marca.nome.toLowerCase().includes(itemSearch));
             console.log('Marcas filtradas:', marcasFiltradas);
             const resulList = document.getElementById('results');
             resulList.innerHTML = '';
             if (!itemSearch) {
                 resulList.innerHTML = '<li class="error">Por favor, digite o nome de uma marca.</li>';
-                return; // Interrompe a execução da função
+                return;
             }
-            if (marcasFiltradas.length > 0) { // condição para exibir as marcas encontradas
+            if (marcasFiltradas.length > 0) {
                 marcasFiltradas.forEach((marca) => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = ` Nome: ${marca.nome}`;
-                    listItem.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                        yield exibirModelos(marca.nome);
+                    listItem.textContent = `Nome: ${marca.nome}`;
+                    listItem.addEventListener('mousemove', () => __awaiter(this, void 0, void 0, function* () {
+                        console.log(`Marca clicada: ${marca}`);
+                        if (marcasFiltradas.length === 1) {
+                            yield exibirModelos(marcasFiltradas[0].nome);
+                        }
                     }));
                     resulList.appendChild(listItem);
                 });
             }
             else {
                 resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>';
-                return;
             }
         }
         catch (error) {
-            console.error('Erro ao encontrar as marcas: ', error); // definindo uma mensagem de erro primeiramente no console
+            console.error('Erro ao buscar marcas:', error);
         }
     });
 }
+// Função para exibir modelos com base na marca selecionada
 function exibirModelos(marcaNome) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('Marca selecionada:', marcaNome);
+        const modelosSelect = document.getElementById('modelosSelect');
         try {
-            console.log('Marca selecionada: ', marcaNome);
-            const modelosSelect = document.getElementById('modelosSelect');
-            const modelos = yield buscarModelos();
-            console.log('Modelos disponiveis: ', modelos);
-            const modelosFiltrados = modelos.filter((modelo) => {
-                modelo.nome.toLowerCase().includes(marcaNome.toLowerCase());
-            });
-            console.log('Modelos filtrados: ', modelosFiltrados);
+            // Limpando as opções anteriores
+            modelosSelect.innerHTML = '<option value="">Selecione um modelo</option>';
+            // Buscando os modelos da marca via API
+            const modelos = yield buscarModelos(); // Passa a marca selecionada para buscar modelos
+            console.log('Modelos encontrados:', modelos);
+            if (modelos.length > 0) {
+                modelos.forEach((modelo) => {
+                    const option = document.createElement('option');
+                    option.value = modelo.nome;
+                    option.textContent = modelo.nome;
+                    modelosSelect.appendChild(option);
+                });
+                modelosSelect.classList.remove('hidden'); // Exibe o select com os modelos
+            }
+            else {
+                modelosSelect.innerHTML = '<option>Nenhum modelo encontrado</option>';
+            }
         }
         catch (error) {
-            console.error('erro ao buscar as marcas');
+            console.error('Erro ao buscar modelos:', error);
+            modelosSelect.innerHTML = '<option>Erro ao carregar modelos</option>';
+            modelosSelect.classList.remove('hidden');
         }
     });
 }
 const buscarBtn = document.getElementById('buscarBtn');
-buscarBtn.addEventListener('click', exibirMarcas); // chamando o evento de clik para exibir as marcas
+buscarBtn.addEventListener('click', () => {
+    console.log('Botão de busca clicado');
+    exibirMarcas(); // Exibe as marcas ao clicar no botão
+});
+window.onload = () => {
+    const modelosSelect = document.getElementById('modelosSelect');
+    modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
+};
+const marcaInput = document.getElementById('marcaInput');
+marcaInput.addEventListener('input', exibirMarcas);

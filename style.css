@@ -101,3 +101,20 @@ ul#results li.error {
     background-color: #ffe6e6;
     font-weight: bold;
 }
+.hidden {
+    display: none;
+}
+
+
+select {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
