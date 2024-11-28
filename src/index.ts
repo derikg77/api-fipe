@@ -34,7 +34,7 @@ async function exibirMarcas() {
             marcasFiltradas.forEach((marca: any) => {
                 const listItem = document.createElement('li');
                 listItem.textContent = `Nome: ${marca.nome}`;
-                listItem.addEventListener('mousemove', async () => {
+                listItem.addEventListener('click', async () => {
                     console.log(`Marca clicada: ${marca}`);
                     if (marcasFiltradas.length === 1) {
                         await exibirModelos(marcasFiltradas[0].nome);
@@ -93,6 +93,6 @@ buscarBtn.addEventListener('click', () => {
 window.onload = () => {
     const modelosSelect = document.getElementById('modelosSelect') as HTMLSelectElement;
     modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
+    modelosSelect.addEventListener('click',() => exibirModelos)
 };
-const marcaInput = document.getElementById('marcaInput') as HTMLInputElement;
-marcaInput.addEventListener('input', exibirMarcas);
+
