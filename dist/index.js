@@ -15,11 +15,12 @@ import { buscarMarcas, buscarModelos } from './apiService.js';
 //     { marca: 'Chevrolet', modelos: ['Onix', 'Tracker', 'Cruze'] },
 // ];
 // Função para exibir marcas
-function exibirMarcas() {
+function exibirMarcas(nome) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const input = document.getElementById('marcaInput');
             const itemSearch = input.value.toLowerCase();
+            const marcaSelect = document.getElementById('marcasSelect');
             // Simulando marcas disponíveis (como retorno de API)
             const marcas = yield buscarMarcas(); // Simula busca de marcas a partir da API
             console.log('Marcas disponíveis:', marcas);
@@ -34,6 +35,10 @@ function exibirMarcas() {
             if (marcasFiltradas.length > 0) {
                 marcasFiltradas.forEach((marca) => {
                     const listItem = document.createElement('li');
+                    const optionMarca = document.createElement('option');
+                    marcaSelect.innerHTML = '<option value="">Selecione uma marca</option>';
+                    optionMarca.value = marca.nome;
+                    optionMarca.textContent = marca.nome;
                     listItem.textContent = `Nome: ${marca.nome}`;
                     listItem.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
                         console.log(`Marca clicada: ${marca}`);
@@ -41,7 +46,16 @@ function exibirMarcas() {
                             yield exibirModelos(marcasFiltradas[0].nome);
                         }
                     }));
+                    optionMarca.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+                        console.log(`Marca clicada: ${marca}`);
+                        for (const marcaFiltrada of marcasFiltradas) {
+                            console.log(`Marca: ${marcaFiltrada}`);
+                            yield exibirMarcas(marcaFiltrada.nome);
+                        }
+                    }));
                     resulList.appendChild(listItem);
+                    marcaSelect.appendChild(optionMarca);
+                    marcaSelect.classList.remove('hidden');
                 });
             }
             else {
@@ -93,4 +107,9 @@ window.onload = () => {
     const modelosSelect = document.getElementById('modelosSelect');
     modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
     modelosSelect.addEventListener('click', () => exibirModelos);
+};
+window.onload = () => {
+    const marcaSelect = document.getElementById('marcasSelect');
+    marcaSelect.classList.add('hidden');
+    marcaSelect.addEventListener('click', () => exibirMarcas);
 };

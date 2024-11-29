@@ -105,7 +105,9 @@ ul#results li.error {
     display: none;
 }
 
-
+h2 {
+    margin-top: 20px;
+}
 select {
     width: 100%;
     display: flex;
@@ -117,4 +119,5 @@ select {
     border-radius: 5px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
+    margin-top: 20px;
 }

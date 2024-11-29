@@ -8,10 +8,11 @@ import { buscarMarcas, buscarModelos } from './apiService.js';
 // ];
 
 // Função para exibir marcas
-async function exibirMarcas() {
+async function exibirMarcas(nome?: string) {
     try {
         const input = document.getElementById('marcaInput') as HTMLInputElement;
         const itemSearch = input.value.toLowerCase();
+        const marcaSelect = document.getElementById('marcasSelect') as HTMLSelectElement;
 
         // Simulando marcas disponíveis (como retorno de API)
         const marcas = await buscarMarcas(); // Simula busca de marcas a partir da API
@@ -33,6 +34,10 @@ async function exibirMarcas() {
         if (marcasFiltradas.length > 0) {
             marcasFiltradas.forEach((marca: any) => {
                 const listItem = document.createElement('li');
+                const optionMarca = document.createElement('option');
+                marcaSelect.innerHTML = '<option value="">Selecione uma marca</option>';
+                optionMarca.value = marca.nome
+                optionMarca.textContent = marca.nome
                 listItem.textContent = `Nome: ${marca.nome}`;
                 listItem.addEventListener('click', async () => {
                     console.log(`Marca clicada: ${marca}`);
@@ -40,7 +45,17 @@ async function exibirMarcas() {
                         await exibirModelos(marcasFiltradas[0].nome);
                     }
                 });
+                optionMarca.addEventListener('click', async () => {
+                    console.log(`Marca clicada: ${marca}`);
+                    for(const marcaFiltrada of marcasFiltradas) {
+                        console.log(`Marca: ${marcaFiltrada}`)
+                        await exibirMarcas(marcaFiltrada.nome)
+                    }
+                })
                 resulList.appendChild(listItem);
+                marcaSelect.appendChild(optionMarca);
+
+                marcaSelect.classList.remove('hidden')
             });
         } else {
             resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>';
@@ -96,3 +111,9 @@ window.onload = () => {
     modelosSelect.addEventListener('click',() => exibirModelos)
 };
 
+window.onload = () => {
+    const marcaSelect = document.getElementById('marcasSelect') as HTMLSelectElement;
+    marcaSelect.classList.add('hidden')
+    marcaSelect.addEventListener('click', () => exibirMarcas)
+    
+}
