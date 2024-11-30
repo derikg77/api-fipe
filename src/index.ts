@@ -9,6 +9,8 @@ import { buscarMarcas, buscarModelos } from './apiService.js';
 
 // Função para exibir marcas
 async function exibirMarcas(nome?: string) {
+    console.log('Marca selecionada:', nome);
+
     try {
         const input = document.getElementById('marcaInput') as HTMLInputElement;
         const itemSearch = input.value.toLowerCase();
@@ -41,20 +43,20 @@ async function exibirMarcas(nome?: string) {
                 listItem.textContent = `Nome: ${marca.nome}`;
                 listItem.addEventListener('click', async () => {
                     console.log(`Marca clicada: ${marca}`);
-                    if (marcasFiltradas.length === 1) {
-                        await exibirModelos(marcasFiltradas[0].nome);
-                    }
+                    
+                        await exibirModelos(marca.nome);
+                    
                 });
                 optionMarca.addEventListener('click', async () => {
                     console.log(`Marca clicada: ${marca}`);
-                    for(const marcaFiltrada of marcasFiltradas) {
-                        console.log(`Marca: ${marcaFiltrada}`)
-                        await exibirMarcas(marcaFiltrada.nome)
-                    }
+                    // for(const marcaFiltrada of marcasFiltradas) {
+                        console.log(`Marca: ${marca.nome}`)
+                        await exibirModelos(marca.nome)
+                    // }
                 })
-                resulList.appendChild(listItem);
+                
                 marcaSelect.appendChild(optionMarca);
-
+                resulList.appendChild(listItem);
                 marcaSelect.classList.remove('hidden')
             });
         } else {
