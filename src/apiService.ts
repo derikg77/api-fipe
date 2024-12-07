@@ -4,6 +4,14 @@ interface Marca {
 
 export async function buscarMarcas(nome?: string): Promise<Marca[]> { // estou exportando a função e definindo os parametros da interface e chamando ela no final
     const baseUrl = 'https://parallelum.com.br/fipe/api/v1/carros/marcas'; // estou armanzenando o url da API em uma variavel
+    // const options = {
+    //     method: 'GET',
+    //     headers: {
+    //         'x-rapidapi-key': 'f4a5bee69dmsh3b9fc36d1807915p12c1c6jsn3e00ac61d198',
+    //         'x-rapidapi-host': 'tabela-fipe-api1.p.rapidapi.com'
+    //     }
+    // };
+    
     const response = await fetch(baseUrl); // esperando a resposta da API via fetch
     if (!response.ok) {
         throw new Error(`Erro ao buscar as marcas: ${response.statusText}`); // verificando se a resposta retornar ok

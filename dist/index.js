@@ -20,12 +20,12 @@ function exibirMarcas(nome) {
         console.log('Marca selecionada:', nome);
         try {
             const input = document.getElementById('marcaInput');
-            const itemSearch = input.value.toLowerCase();
+            const itemSearch = (input === null || input === void 0 ? void 0 : input.value.toLowerCase()) || ''; // Verificação de segurança
             const marcaSelect = document.getElementById('marcasSelect');
             // Simulando marcas disponíveis (como retorno de API)
             const marcas = yield buscarMarcas(); // Simula busca de marcas a partir da API
             console.log('Marcas disponíveis:', marcas);
-            const marcasFiltradas = marcas.filter((marca) => marca.nome.toLowerCase().includes(itemSearch));
+            const marcasFiltradas = marcas.filter((marca) => { var _a; return (_a = marca === null || marca === void 0 ? void 0 : marca.nome) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(itemSearch); });
             console.log('Marcas filtradas:', marcasFiltradas);
             const resulList = document.getElementById('results');
             resulList.innerHTML = '';
@@ -34,28 +34,25 @@ function exibirMarcas(nome) {
                 return;
             }
             if (marcasFiltradas.length > 0) {
+                marcaSelect.innerHTML = '<option value="">Selecione uma marca</option>'; // Limpa o select
                 marcasFiltradas.forEach((marca) => {
                     const listItem = document.createElement('li');
                     const optionMarca = document.createElement('option');
-                    marcaSelect.innerHTML = '<option value="">Selecione uma marca</option>';
                     optionMarca.value = marca.nome;
                     optionMarca.textContent = marca.nome;
                     listItem.textContent = `Nome: ${marca.nome}`;
                     listItem.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                        console.log(`Marca clicada: ${marca}`);
+                        console.log(`Marca clicada: ${marca.nome}`);
                         yield exibirModelos(marca.nome);
                     }));
                     optionMarca.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
-                        console.log(`Marca clicada: ${marca}`);
-                        // for(const marcaFiltrada of marcasFiltradas) {
-                        console.log(`Marca: ${marca.nome}`);
+                        console.log(`Marca clicada: ${marca.nome}`);
                         yield exibirModelos(marca.nome);
-                        // }
                     }));
                     marcaSelect.appendChild(optionMarca);
                     resulList.appendChild(listItem);
-                    marcaSelect.classList.remove('hidden');
                 });
+                marcaSelect.classList.remove('hidden');
             }
             else {
                 resulList.innerHTML = '<li class="error">Nenhuma marca encontrada</li>';
@@ -97,18 +94,24 @@ function exibirModelos(marcaNome) {
         }
     });
 }
+// Configura evento do botão buscar
 const buscarBtn = document.getElementById('buscarBtn');
-buscarBtn.addEventListener('click', () => {
+buscarBtn === null || buscarBtn === void 0 ? void 0 : buscarBtn.addEventListener('click', () => {
     console.log('Botão de busca clicado');
     exibirMarcas(); // Exibe as marcas ao clicar no botão
 });
+// Configuração inicial para ocultar os selects e associar eventos
 window.onload = () => {
     const modelosSelect = document.getElementById('modelosSelect');
-    modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
-    modelosSelect.addEventListener('click', () => exibirModelos);
-};
-window.onload = () => {
     const marcaSelect = document.getElementById('marcasSelect');
-    marcaSelect.classList.add('hidden');
-    marcaSelect.addEventListener('click', () => exibirMarcas);
+    modelosSelect === null || modelosSelect === void 0 ? void 0 : modelosSelect.classList.add('hidden'); // Ocultar o select inicialmente
+    marcaSelect === null || marcaSelect === void 0 ? void 0 : marcaSelect.classList.add('hidden');
+    marcaSelect === null || marcaSelect === void 0 ? void 0 : marcaSelect.addEventListener('change', (event) => __awaiter(void 0, void 0, void 0, function* () {
+        const target = event.target;
+        const marcaSelecionada = target === null || target === void 0 ? void 0 : target.value;
+        if (marcaSelecionada) {
+            console.log(`Marca selecionada via select: ${marcaSelecionada}`);
+            yield exibirModelos(marcaSelecionada);
+        }
+    }));
 };
