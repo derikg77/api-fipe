@@ -98,7 +98,13 @@ function exibirModelos(marcaNome) {
 const buscarBtn = document.getElementById('buscarBtn');
 buscarBtn === null || buscarBtn === void 0 ? void 0 : buscarBtn.addEventListener('click', () => {
     console.log('Botão de busca clicado');
-    exibirMarcas(); // Exibe as marcas ao clicar no botão
+    // Acessa o valor do input
+    const input = document.getElementById('marcaInput');
+    const inputValue = (input === null || input === void 0 ? void 0 : input.value.trim().toLowerCase()) || ''; // Garante segurança e normalização
+    console.log(`Valor do input: ${inputValue}`);
+    const marcaSelecionada = (input === null || input === void 0 ? void 0 : input.value) || '';
+    console.log(`Marca selecionada via select: ${marcaSelecionada}`);
+    exibirMarcas(marcaSelecionada); // Exibe as marcas ao clicar no botão
 });
 // Configuração inicial para ocultar os selects e associar eventos
 window.onload = () => {

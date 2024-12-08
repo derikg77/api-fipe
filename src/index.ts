@@ -101,9 +101,21 @@ async function exibirModelos(marcaNome: string) {
 
 // Configura evento do botão buscar
 const buscarBtn = document.getElementById('buscarBtn') as HTMLButtonElement;
+
 buscarBtn?.addEventListener('click', () => {
     console.log('Botão de busca clicado');
-    exibirMarcas(); // Exibe as marcas ao clicar no botão
+
+    // Acessa o valor do input
+    const input = document.getElementById('marcaInput') as HTMLInputElement;
+    const inputValue = input?.value.trim().toLowerCase() || ''; // Garante segurança e normalização
+    console.log(`Valor do input: ${inputValue}`);
+
+    const marcaSelecionada = input?.value || '';
+    console.log(`Marca selecionada via select: ${marcaSelecionada}`);
+
+    exibirMarcas(marcaSelecionada); // Exibe as marcas ao clicar no botão
+    
+   
 });
 
 // Configuração inicial para ocultar os selects e associar eventos
